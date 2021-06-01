@@ -10,7 +10,7 @@ function toggleCheckbox() {
     }
   })
 };
-toggleCheckbox();
+
 
 function toggleCart() {
   const btnCart = document.getElementById('cart');
@@ -27,7 +27,6 @@ function toggleCart() {
     document.body.style.overflow = '';
   });
 }
-toggleCart();
 
 function addCart() {
   const cards = document.querySelectorAll('.goods .card');
@@ -74,4 +73,23 @@ function addCart() {
   }
 }
 
+function actionPage() {
+  const cards = document.querySelectorAll('.goods .card');
+  const discountCheckbox = document.getElementById('discount-checkbox');
+  discountCheckbox.addEventListener('click', () => {
+    cards.forEach((card) => {
+      if (discountCheckbox.checked) {
+        if (!card.querySelector('.card-sale')) {
+          card.parentNode.style.display = 'none';
+        }
+      } else {
+        card.parentNode.style.display = '';
+      }
+    })
+  })
+}
+
+toggleCheckbox();
+toggleCart();
 addCart();
+actionPage();
