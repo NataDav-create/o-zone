@@ -104,8 +104,20 @@ function actionPage() {
       }
     })
   };
-  min.addEventListener('change', filterPrice)
-  max.addEventListener('change', filterPrice)
+  min.addEventListener('change', filterPrice);
+  max.addEventListener('change', filterPrice);
+
+  searchBtn.addEventListener('click', () => {
+    const searchText = new RegExp(search.value.trim(), 'i');
+    cards.forEach((card) => {
+      const title = card.querySelector('.card-title');
+      if (!searchText.test(title.textContent)) {
+        card.parentNode.style.display = 'none';
+      } else {
+        card.parentNode.style.display = '';
+      }
+    });
+  });
 }
 
 toggleCheckbox();
