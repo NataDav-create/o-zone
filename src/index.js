@@ -80,6 +80,7 @@ function actionPage() {
   const max = document.getElementById('max');
   const search = document.querySelector('.search-wrapper_input');
   const searchBtn = document.querySelector('.search-btn');
+  const activeLi = document.querySelector('.catalog-list li.active');
 
   discountCheckbox.addEventListener('click', () => {
     cards.forEach((card) => {
@@ -87,6 +88,11 @@ function actionPage() {
         if (!card.querySelector('.card-sale')) {
           card.parentNode.style.display = 'none';
         }
+      } else if (activeLi) {
+        if (card.dataset.category !== activeLi.textContent) {
+          card.parentNode.style.display = 'none';
+        }
+
       } else {
         card.parentNode.style.display = '';
       }
@@ -182,6 +188,9 @@ function renderCatalog() {
     li.textContent = item;
     catalogList.appendChild(li)
   });
+
+  const allLi = catalogList.querySelectorAll('li');
+
   catalogBtn.addEventListener('click', (e) => {
     if (catalogWrapper.style.display) {
       catalogWrapper.style.display = '';
@@ -196,6 +205,14 @@ function renderCatalog() {
           card.parentNode.style.display = 'none';
         }
       })
+      allLi.forEach((elem) => {
+        if (elem === e.target) {
+          elem.classList.add('active');
+        } else {
+          elem.classList.remove('active');
+        }
+      });
+      actionPage();
     }
   });
 }
