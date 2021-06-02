@@ -117,9 +117,24 @@ function actionPage() {
         card.parentNode.style.display = '';
       }
     });
+    search.value = '';
   });
 }
 
+function getData() {
+  fetch('../db/db.json').then((response) => {
+      if (response.ok) {
+        console.log(response)
+      } else {
+        throw new Error(response.status);
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+getData();
 toggleCheckbox();
 toggleCart();
 addCart();
