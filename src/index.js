@@ -123,14 +123,16 @@ function actionPage() {
 
 function getData() {
   const goodsWrapper = document.querySelector('.goods');
-  fetch('../db/db.json').then((response) => {
+  return fetch('../db/db.json').then((response) => {
       if (response.ok) {
         return response.json();
       } else {
         throw new Error(response.status);
       }
     })
-    .then(data => renderCards(data))
+    .then((data) => {
+      return data
+    })
     .catch((err) => {
       console.log(err);
       goodsWrapper.innerHTML = '<div style="color: red; font-size: 30px">Something went wrong</div>'
@@ -143,12 +145,13 @@ function renderCards(data) {
     img,
     price,
     title,
-    sale
+    sale,
+    category
   }) => {
     const card = document.createElement('div');
     card.className = 'col-12 col-md-6 col-lg-4 col-xl-3';
     card.innerHTML = `
-								<div class="card">
+								<div class="card" data-category="${category}">
 								${sale ? 	'<div class="card-sale">🔥Hot Sale🔥</div>' : ''}
 									<div class="card-img-wrapper">
 										<span class="card-img-top"
@@ -165,8 +168,34 @@ function renderCards(data) {
   })
 }
 
-getData();
-toggleCheckbox();
-toggleCart();
-addCart();
-actionPage();
+function renderCatalog() {
+  const cards = document.querySelectorAll('.goods .card');
+  const catalogList = document.querySelector('.catalog-list');
+  const catalogBtn = document.querySelector('.catalog-button');
+  const catalogWrapper = document.querySelector('.catalog');
+  const categories = new Set();
+  cards.forEach((card) => {
+    categories.add(card.dataset.category);
+  });
+  categories.forEach((item) => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    catalogList.appendChild(li)
+  });
+  catalogBtn.addEventListener('click', () => {
+    if (catalogWrapper.style.display) {
+      catalogWrapper.style.display = '';
+    } else {
+      catalogWrapper.style.display = 'block';
+    }
+  });
+}
+// getData();
+getData().then((data) => {
+  renderCards(data);
+  renderCatalog();
+  toggleCheckbox();
+  toggleCart();
+  addCart();
+  actionPage();
+})
