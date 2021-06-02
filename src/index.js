@@ -182,11 +182,20 @@ function renderCatalog() {
     li.textContent = item;
     catalogList.appendChild(li)
   });
-  catalogBtn.addEventListener('click', () => {
+  catalogBtn.addEventListener('click', (e) => {
     if (catalogWrapper.style.display) {
       catalogWrapper.style.display = '';
     } else {
       catalogWrapper.style.display = 'block';
+    }
+    if (e.target.tagName === 'LI') {
+      cards.forEach((card) => {
+        if (card.dataset.category === e.target.textContent) {
+          card.parentNode.style.display = '';
+        } else {
+          card.parentNode.style.display = 'none';
+        }
+      })
     }
   });
 }
