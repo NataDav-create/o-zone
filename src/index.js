@@ -122,16 +122,47 @@ function actionPage() {
 }
 
 function getData() {
+  const goodsWrapper = document.querySelector('.goods');
   fetch('../db/db.json').then((response) => {
       if (response.ok) {
-        console.log(response)
+        return response.json();
       } else {
         throw new Error(response.status);
       }
     })
+    .then(data => renderCards(data))
     .catch((err) => {
-      console.log(err)
-    })
+      console.log(err);
+      goodsWrapper.innerHTML = '<div style="color: red; font-size: 30px">Something went wrong</div>'
+    });
+}
+
+function renderCards(data) {
+  const goodsWrapper = document.querySelector('.goods');
+  data.goods.forEach(({
+    img,
+    price,
+    title,
+    sale
+  }) => {
+    const card = document.createElement('div');
+    card.className = 'col-12 col-md-6 col-lg-4 col-xl-3';
+    card.innerHTML = `
+								<div class="card">
+								${sale ? 	'<div class="card-sale">🔥Hot Sale🔥</div>' : ''}
+									<div class="card-img-wrapper">
+										<span class="card-img-top"
+											style="background-image: url('${img}')"></span>
+									</div>
+									<div class="card-body justify-content-between">
+										<div class="card-price">${price} ₽</div>
+										<h5 class="card-title">${title}</h5>
+										<button class="btn btn-primary">В корзину</button>
+									</div>
+								</div>
+    `;
+    goodsWrapper.appendChild(card);
+  })
 }
 
 getData();
